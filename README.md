@@ -16,4 +16,4 @@ A dynamic URL builder tool with **Bootstrap**, **jQuery**, and **JavaScript**. T
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/dynamic-url-builder.git
+   git clone https://github.com/your-username/Dynamic-URL-builder.git
