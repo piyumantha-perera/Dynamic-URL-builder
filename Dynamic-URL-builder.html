@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic URL Builder with Bootstrap</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Dynamic URL Builder</h2>
+
+        <!-- Base URL Input -->
+        <div class="row mb-3">
+            <label for="baseUrl" class="col-sm-2 col-form-label">Base URL:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="baseUrl" placeholder="Enter base URL">
+            </div>
+        </div>
+
+        <!-- Parameters Container -->
+        <div id="paramsContainer"></div>
+
+        <!-- Add Parameter Button -->
+        <div class="text-center my-3">
+            <button id="addParam" class="btn btn-primary">+ Add Parameter</button>
+        </div>
+
+        <!-- Generate URL Button -->
+        <div class="text-center mb-3">
+            <button id="generateUrl" class="btn btn-success">Generate URL</button>
+        </div>
+
+        <!-- Generated URL Output -->
+        <div class="row">
+            <label for="generatedUrl" class="col-sm-2 col-form-label">Generated URL:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="generatedUrl" readonly>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let paramCount = 0;
+
+            // Function to add a new parameter input field
+            $('#addParam').on('click', function () {
+                paramCount++;
+                $('#paramsContainer').append(`
+                <div id="param${paramCount}" class="row mb-2 align-items-center">
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control paramKey" placeholder="Key">
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control paramValue" placeholder="Value">
+                    </div>
+                    <div class="col-sm-2 text-end">
+                        <button class="btn btn-danger removeParam" data-id="${paramCount}">Remove</button>
+                    </div>
+                </div>
+            `);
+            });
+
+            // Function to remove a parameter field
+            $(document).on('click', '.removeParam', function () {
+                const id = $(this).data('id');
+                $(`#param${id}`).remove();
+            });
+
+            // Function to generate the URL
+            $('#generateUrl').on('click', function () {
+                const baseUrl = $('#baseUrl').val().trim();
+                let url = baseUrl.includes('?') ? baseUrl : baseUrl + '?';
+                const params = [];
+
+                $('#paramsContainer .row').each(function () {
+                    const key = $(this).find('.paramKey').val()?.trim() || '';
+                    const value = $(this).find('.paramValue').val()?.trim() || '';
+                    if (key && value) {
+                        params.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+                    }
+                });
+
+                if (params.length) {
+                    url += params.join('&');
+                }
+
+                $('#generatedUrl').val(url);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
